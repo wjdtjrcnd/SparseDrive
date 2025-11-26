@@ -25,11 +25,22 @@ docker build -t sparsedrive:test_train .
 # NuScenes 데이터와 SparseDrive 코드 폴더를 호스트에서 컨테이너로 마운트하는 예시
 
 docker run -it --gpus all \
+    --shm-size=32g \
     -v /mnt/hdd/nuscenes_data_ubuntu/full_dataset:/workspace/data/nuscenes \
     -v /home/jehyeon/SparseDrive:/workspace/SparseDrive \
     sparsedrive:test_train
 
+# 재실행시에는 docker container 이름으로 
+docker start 0b9b8979b125
 
+docker attach 0b9b8979b125
+
+conda init bash
+source ~/.bashrc
+conda activate sparsedrive
+
+
+/workspace/SparseDrive/data/nuscenes
 
 ```
 

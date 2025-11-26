@@ -40,9 +40,25 @@ class LoadMultiViewImageFromFiles(object):
         """
         filename = results["img_filename"]
         # img is of shape (h, w, c, num_views)
-        img = np.stack(
-            [mmcv.imread(name, self.color_type) for name in filename], axis=-1
-        )
+        # img = np.stack(
+        #     [mmcv.imread(name, self.color_type) for name in filename], axis=-1
+        # )
+        try:
+            imgs = [mmcv.imread(name, self.color_type) for name in filename]
+        except Exception as e:
+            print(f"[ERROR] Failed to load image. Filename: {filename}")
+            raise e
+
+        # Check shapes
+        shapes = [im.shape if im is not None else None for im in imgs]
+        if len(set(shapes)) != 1:
+            print("\n[Shape Mismatch Detected]")
+            for nm, sh in zip(filename, shapes):
+                print(f"  - {nm} : {sh}")
+            raise ValueError("Image shapes are not the same!")
+
+        img = np.stack(imgs, axis=-1)
+       
         if self.to_float32:
             img = img.astype(np.float32)
         results["filename"] = filename
@@ -61,6 +77,7 @@ class LoadMultiViewImageFromFiles(object):
             to_rgb=False,
         )
         return results
+
 
     def __repr__(self):
         """str: Return a string that describes the module."""
