@@ -12,7 +12,8 @@ Docker 환경에서 머신러닝/딥러닝 프로젝트를 실행할 때 자주 
 # <image_name>:<tag> 형태로 지정 가능
 # 예시: sparsedrive:latest
 
-docker build -t sparsedrive:latest .
+docker build -t sparsedrive:test_train .
+
 ```
 
 ---
@@ -24,9 +25,12 @@ docker build -t sparsedrive:latest .
 # NuScenes 데이터와 SparseDrive 코드 폴더를 호스트에서 컨테이너로 마운트하는 예시
 
 docker run -it --gpus all \
-    -v /mnt/hdd/nuscenes:/workspace/data/nuscenes \
-    -v ~/SparseDrive:/workspace/SparseDrive \
-    sparsedrive:latest
+    -v /mnt/hdd/nuscenes_data_ubuntu/full_dataset:/workspace/data/nuscenes \
+    -v /home/jehyeon/SparseDrive:/workspace/SparseDrive \
+    sparsedrive:test_train
+
+
+
 ```
 
 ---
